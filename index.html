@@ -9,13 +9,13 @@
     </div> -->
 
     <script type="text/javascript">
-        const creatBox = () => {
+        const creatBox = (row) => {
             const div = document.createElement('div');
             div.style.width = '10px';
             div.style.height = '10px';
             div.style.border = '1px solid black';
             div.style.display = 'inline-block';
-            document.body.appendChild(div);
+            row.appendChild(div);
         
             div.addEventListener('click', () => {
                 alert('div clicked');
@@ -23,14 +23,20 @@
         }
 
         const creatRowOfBoxes = (numberOfBoxes) => {
+            const row = document.createElement('div')
+            document.body.appendChild(row);
             let i = 0;
             while (i < numberOfBoxes ) {
                 i = i + 1
-                creatBox()       
+                creatBox(row)       
             }
         }
-
-        creatRowOfBoxes (10)    
+        let i = 0;
+        while (i < 10) {
+            i = i +1
+            creatRowOfBoxes (10)   
+        }
+           
     
     </script>
 </body>
