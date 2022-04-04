@@ -1,8 +1,8 @@
 <body>
 
     <script type="text/javascript">
-        const bombX = Math.floor( Math.random() * 10)
-        const bombY = Math.floor( Math.random() * 10) 
+        const bombX = Math.floor( Math.random() * 100)
+        const bombY = Math.floor( Math.random() * 45) 
         const creatBox = (row, x, y) => {
             const div = document.createElement('div');
             div.style.width = '10px';
@@ -10,7 +10,6 @@
             div.style.border = '1px solid black';
             div.style.display = 'inline-block';
             if (x == bombX && y == bombY) {
-                // div.style.backgroundColor = 'red'
             }
             row.appendChild(div);
         
@@ -39,7 +38,7 @@
                  y = y + 1  
             }   
         }
-        creatRows(10,10)
+        creatRows(45,100)
         
     </script>
 </body>
