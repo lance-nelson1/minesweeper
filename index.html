@@ -42,6 +42,18 @@
        
         const cells = []
         window.cells = cells
+        const getCellByCoord = (x, y) => {
+            let i = 0
+            while (i < cells.length) {
+                const cellsAti = cells[i];
+                if (cellsAti.x === x && cellsAti.y === y){
+                    return cellsAti;
+                }
+                i = i + 1
+            }
+            throw new Error('could not find it')
+        }
+        window.getCellByCoord = getCellByCoord
         const creatBox = (row, x, y) => {   
             const div = document.createElement('div');
             const cell = new Cell(x, y, div)
