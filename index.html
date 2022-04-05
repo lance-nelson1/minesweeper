@@ -1,10 +1,51 @@
 <body>
 
     <script type="text/javascript">
-        const bombX = Math.floor( Math.random() * 100)
-        const bombY = Math.floor( Math.random() * 45) 
-        const creatBox = (row, x, y) => {
+        const width = 5
+        const height = 5
+        const bombX = Math.floor( Math.random() * width)
+        const bombY = Math.floor( Math.random() * height) 
+        
+
+        class Cell {
+            constructor(x, y, div) {
+                this.x = x;
+                this.y = y;
+                
+                this.isBomb = (x == bombX && y == bombY)
+                this.div = div;
+                this.isRevealed = false;
+                div.addEventListener('click', () => {
+                    this.reveal();
+                });
+                div.addEventListener('contextmenu', (e) => {
+                    e.preventDefault();
+                    this.flag()
+                })
+                this.reveal = () => {
+                    if (this.isBomb)
+                    div.style.backgroundColor = 'red'
+                    else {
+                        div.style.backgroundColor = 'grey'   
+                    }
+                }
+                this.flag = () => {
+                    this.isFlagged = true;
+                    this.div.style.backgroundColor = 'green'
+                }
+            }
+
+        }
+
+
+        
+       
+        const cells = []
+        window.cells = cells
+        const creatBox = (row, x, y) => {   
             const div = document.createElement('div');
+            const cell = new Cell(x, y, div)
+            cells.push(cell)
             div.style.width = '10px';
             div.style.height = '10px';
             div.style.border = '1px solid black';
@@ -13,15 +54,9 @@
             }
             row.appendChild(div);
         
-            div.addEventListener('click', () => {
-                if (x == bombX && y == bombY) {
-                    div.style.backgroundColor = 'orange'
-                } else {
-                    div.style.backgroundColor = 'grey'  
-                }
-            });
+            
         }
-
+       
         const creatRowOfBoxes = (numberOfBoxes, y) => {
             const row = document.createElement('div')
             document.body.appendChild(row);
@@ -38,7 +73,7 @@
                  y = y + 1  
             }   
         }
-        creatRows(45,100)
+        creatRows(height,width)
         
     </script>
 </body>
