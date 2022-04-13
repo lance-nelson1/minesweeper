@@ -2,10 +2,17 @@
 
     <script type="text/javascript">
         const width = 23
-        const height = 10
-        const bombX = Math.floor( Math.random() * width)
-        const bombY = Math.floor( Math.random() * height) 
-        
+        const height = 11
+        const amountOfBombs = 25
+        const bombs = [] 
+        const addBomb = () => {
+            const randomBomb = {x: Math.floor( Math.random() * width), y: Math.floor( Math.random() * height)}
+            bombs.push (randomBomb)
+        }
+        while (bombs.length < amountOfBombs ) {
+            addBomb () 
+        } 
+        console.log (bombs)
         
         const cells = []
         window.cells = cells
@@ -24,8 +31,15 @@
             constructor(x, y, div) {
                 this.x = x;
                 this.y = y;
+                this.isBomb = false
+                for (let i = 0; i < bombs.length; i = i + 1) {
+                    if (!this.isBomb) {
+                        const bomb = bombs [i];
+                        this.isBomb = (x == bomb.x && y == bomb.y)
+                    }
+                }
                 
-                this.isBomb = (x == bombX && y == bombY)
+
                 this.div = div;
                 this.isRevealed = false;
                 div.addEventListener('click', () => {
@@ -36,6 +50,10 @@
                     this.flag()
                 })
                 this.reveal = () => {
+                    if (this.isRevealed) {
+                        return 
+                    }
+                    this.isRevealed = true
                     if (this.isBomb){
                         div.style.backgroundColor = 'red'
                     }
@@ -58,8 +76,16 @@
                                 bombCount = bombCount + 1
                             }  
                         }
-                        if (bombCount > 0){
+                        if (bombCount > 0) {
                             div.innerHTML = bombCount
+                        }
+                        if (bombCount === 0) {
+                            for  (const neighborCoord of neighborCoords){
+                                const neighbor = getCellByCoord(neighborCoord.x, neighborCoord.y);
+                                if (neighbor ){
+                                    neighbor.reveal ()
+                                }  
+                            } 
                         }
                         div.style.backgroundColor = 'grey'
                     }
@@ -85,8 +111,6 @@
             div.style.border = '1px solid black';
             div.style.display = 'inline-block';
             div.style.fontSize = '56'
-            if (x == bombX && y == bombY) {
-            }
             row.appendChild(div);
         
             
