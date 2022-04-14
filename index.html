@@ -1,138 +1,156 @@
 <body>
 
     <script type="text/javascript">
-        const width = 23
-        const height = 11
-        const amountOfBombs = 25
-        const bombs = [] 
-        const addBomb = () => {
-            const randomBomb = {x: Math.floor( Math.random() * width), y: Math.floor( Math.random() * height)}
-            bombs.push (randomBomb)
-        }
-        while (bombs.length < amountOfBombs ) {
-            addBomb () 
-        } 
-        console.log (bombs)
-        
-        const cells = []
-        window.cells = cells
-        const getCellByCoord = (x, y) => {
-            let i = 0
-            while (i < cells.length) {
-                const cellsAti = cells[i];
-                if (cellsAti.x === x && cellsAti.y === y){
-                    return cellsAti;
-                }
-                i = i + 1
-            }
-            return null;
-        }
-        class Cell {
-            constructor(x, y, div) {
-                this.x = x;
-                this.y = y;
-                this.isBomb = false
-                for (let i = 0; i < bombs.length; i = i + 1) {
-                    if (!this.isBomb) {
-                        const bomb = bombs [i];
-                        this.isBomb = (x == bomb.x && y == bomb.y)
-                    }
-                }
-                
 
-                this.div = div;
-                this.isRevealed = false;
-                div.addEventListener('click', () => {
-                    this.reveal();
-                });
-                div.addEventListener('contextmenu', (e) => {
-                    e.preventDefault();
-                    this.flag()
-                })
-                this.reveal = () => {
-                    if (this.isRevealed) {
-                        return 
+        class Game {
+            constructor({ width, height, amountOfBombs }) {
+                let rootDiv;
+                this.start = () => {
+                    rootDiv = document.createElement('div');
+                    document.body.appendChild(rootDiv) 
+                    const bombs = []
+                    const addBomb = () => {
+                        const randomBomb = { x: Math.floor(Math.random() * width), y: Math.floor(Math.random() * height) }
+                        bombs.push(randomBomb)
                     }
-                    this.isRevealed = true
-                    if (this.isBomb){
-                        div.style.backgroundColor = 'red'
+                    while (bombs.length < amountOfBombs) {
+                        addBomb()
                     }
-                    
-                    else {
-                        const neighborCoords = [
-                            { x: x-1, y: y  },
-                            { x: x-1, y: y -1 },
-                            { x: x, y: y -1 },
-                            { x: x+1, y: y -1 },
-                            { x: x+1, y: y  },
-                            { x: x+1, y: y +1 },
-                            { x: x, y: y +1 },
-                            { x: x-1, y: y +1 },
-                        ]
-                        let bombCount = 0
-                        for  (const neighborCoord of neighborCoords){
-                            const neighbor = getCellByCoord(neighborCoord.x, neighborCoord.y);
-                            if (neighbor && neighbor.isBomb){
-                                bombCount = bombCount + 1
-                            }  
+                    console.log(bombs)
+
+                    const cells = []
+                    window.cells = cells
+                    const getCellByCoord = (x, y) => {
+                        let i = 0
+                        while (i < cells.length) {
+                            const cellsAti = cells[i];
+                            if (cellsAti.x === x && cellsAti.y === y) {
+                                return cellsAti;
+                            }
+                            i = i + 1
                         }
-                        if (bombCount > 0) {
-                            div.innerHTML = bombCount
-                        }
-                        if (bombCount === 0) {
-                            for  (const neighborCoord of neighborCoords){
-                                const neighbor = getCellByCoord(neighborCoord.x, neighborCoord.y);
-                                if (neighbor ){
-                                    neighbor.reveal ()
-                                }  
-                            } 
-                        }
-                        div.style.backgroundColor = 'grey'
+                        return null;
                     }
-                }
-                this.flag = () => {
-                    this.isFlagged = true;
-                    this.div.style.backgroundColor = 'green'
-                }
-            }
+                    class Cell {
+                        constructor(x, y, div) {
+                            this.x = x;
+                            this.y = y;
+                            this.isBomb = false
+                            for (let i = 0; i < bombs.length; i = i + 1) {
+                                if (!this.isBomb) {
+                                    const bomb = bombs[i];
+                                    this.isBomb = (x == bomb.x && y == bomb.y)
+                                }
+                            }
 
-        }
+
+                            this.div = div;
+                            this.isRevealed = false;
+                            div.addEventListener('click', () => {
+                                this.reveal();
+                            });
+                            div.addEventListener('contextmenu', (e) => {
+                                e.preventDefault();
+                                this.flag()
+                            })
+                            this.reveal = () => {
+                                if (this.isRevealed) {
+                                    return
+                                }
+                                this.isRevealed = true
+                                if (this.isBomb) {
+                                    div.style.backgroundColor = 'red'
+                                }
+
+                                else {
+                                    const neighborCoords = [
+                                        { x: x - 1, y: y },
+                                        { x: x - 1, y: y - 1 },
+                                        { x: x, y: y - 1 },
+                                        { x: x + 1, y: y - 1 },
+                                        { x: x + 1, y: y },
+                                        { x: x + 1, y: y + 1 },
+                                        { x: x, y: y + 1 },
+                                        { x: x - 1, y: y + 1 },
+                                    ]
+                                    let bombCount = 0
+                                    for (const neighborCoord of neighborCoords) {
+                                        const neighbor = getCellByCoord(neighborCoord.x, neighborCoord.y);
+                                        if (neighbor && neighbor.isBomb) {
+                                            bombCount = bombCount + 1
+                                        }
+                                    }
+                                    if (bombCount > 0) {
+                                        div.innerHTML = bombCount
+                                    }
+                                    if (bombCount === 0) {
+                                        for (const neighborCoord of neighborCoords) {
+                                            const neighbor = getCellByCoord(neighborCoord.x, neighborCoord.y);
+                                            if (neighbor) {
+                                                neighbor.reveal()
+                                            }
+                                        }
+                                    }
+                                    div.style.backgroundColor = 'grey'
+                                }
+                            }
+                            this.flag = () => {
+                                this.isFlagged = true;
+                                this.div.style.backgroundColor = 'green'
+                            }
+                        }
+
+                    }
 
 
-        
-       
-        window.getCellByCoord = getCellByCoord
-        const creatBox = (row, x, y) => {   
-            const div = document.createElement('div');
-            const cell = new Cell(x, y, div)
-            cells.push(cell)
-            div.style.width = '50px';
-            div.style.height = '50px';
-            div.style.border = '1px solid black';
-            div.style.display = 'inline-block';
-            div.style.fontSize = '56'
-            row.appendChild(div);
-        
-            
-        }
-       
-        const creatRowOfBoxes = (numberOfBoxes, y) => {
-            const row = document.createElement('div')
-            document.body.appendChild(row);
-            let x = 0;
-            while (x < numberOfBoxes ) {
-                creatBox(row, x, y)
-                x = x + 1      
-            }
-        }
-        const creatRows = (numberOfRows, numberOfCollums) => {
-            let y = 0;
-            while (y < numberOfRows) {
-                creatRowOfBoxes (numberOfCollums, y)
-                 y = y + 1  
-            }   
-        }
-        creatRows(height,width)
-        
+
+
+                    window.getCellByCoord = getCellByCoord
+                    const creatBox = (row, x, y) => {
+                        const div = document.createElement('div');
+                        const cell = new Cell(x, y, div)
+                        cells.push(cell)
+                        div.style.width = '50px';
+                        div.style.height = '50px';
+                        div.style.border = '1px solid black';
+                        div.style.display = 'inline-block';
+                        div.style.fontSize = '56'
+                        row.appendChild(div);
+
+
+                    }
+
+                    const creatRowOfBoxes = (numberOfBoxes, y) => {
+                        const row = document.createElement('div')
+                        rootDiv.appendChild(row);
+                        let x = 0;
+                        while (x < numberOfBoxes) {
+                            creatBox(row, x, y)
+                            x = x + 1
+                        }
+                    }
+                    const creatRows = (numberOfRows, numberOfCollums) => {
+                        let y = 0;
+                        while (y < numberOfRows) {
+                            creatRowOfBoxes(numberOfCollums, y)
+                            y = y + 1
+                        }
+                    }
+                    creatRows(height, width)
+
+                } // end of start function
+                this.reset = () => {
+                    rootDiv.remove()
+                    this.start()
+                } 
+            } // end of game constructor
+        }// end of game class
+         const game = new Game ({width: 5, height: 5, amountOfBombs: 1})
+         game.start ()
+        document.body.addEventListener('keydown', e => {
+            if (e.key === 'r' || e.key === 'R') {
+                game.reset()
+            } 
+        });
     </script>
 </body>
