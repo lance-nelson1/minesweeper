@@ -3,8 +3,13 @@
     <script type="text/javascript">
 
         class Game {
+            
             constructor({ width, height, amountOfBombs }) {
                 let rootDiv;
+                const lose = () => {
+                    alert('you lose')
+                    game.reset()   
+                }
                 this.start = () => {
                     rootDiv = document.createElement('div');
                     document.body.appendChild(rootDiv) 
@@ -60,6 +65,7 @@
                                 this.isRevealed = true
                                 if (this.isBomb) {
                                     div.style.backgroundColor = 'red'
+                                    lose()
                                 }
 
                                 else {
@@ -145,7 +151,7 @@
                 } 
             } // end of game constructor
         }// end of game class
-         const game = new Game ({width: 5, height: 5, amountOfBombs: 1})
+         const game = new Game ({width: 23, height: 11, amountOfBombs: 15})
          game.start ()
         document.body.addEventListener('keydown', e => {
             if (e.key === 'r' || e.key === 'R') {
