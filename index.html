@@ -3,16 +3,16 @@
     <script type="text/javascript">
 
         class Game {
-            
+
             constructor({ width, height, amountOfBombs }) {
                 let rootDiv;
                 const lose = () => {
                     alert('you lose')
-                    game.reset()   
+                    game.reset()
                 }
                 this.start = () => {
                     rootDiv = document.createElement('div');
-                    document.body.appendChild(rootDiv) 
+                    document.body.appendChild(rootDiv)
                     const bombs = []
                     const addBomb = () => {
                         const randomBomb = { x: Math.floor(Math.random() * width), y: Math.floor(Math.random() * height) }
@@ -59,12 +59,12 @@
                                 this.flag()
                             })
                             this.reveal = () => {
-                                if (this.isRevealed) {
+                                if (this.isRevealed || this.isFlagged) {
                                     return
                                 }
                                 this.isRevealed = true
                                 if (this.isBomb) {
-                                    div.style.backgroundColor = 'red'
+                                    div.style.backgroundimage = 'red'
                                     lose()
                                 }
 
@@ -101,8 +101,23 @@
                                 }
                             }
                             this.flag = () => {
-                                this.isFlagged = true;
-                                this.div.style.backgroundColor = 'green'
+                                if (this.isRevealed === true) {
+
+                                }
+                                else {
+                                    //when the cell is flagged
+                                    if (this.isFlagged === true) {
+                                        //unflag
+                                        this.isFlagged = false
+                                        this.div.style.backgroundColor = 'inherit'
+                                    }
+                                    //otherwise
+                                    else {
+                                        //flag
+                                        this.isFlagged = true;
+                                        this.div.style.backgroundColor = 'green'
+                                    }
+                                }
                             }
                         }
 
@@ -148,15 +163,15 @@
                 this.reset = () => {
                     rootDiv.remove()
                     this.start()
-                } 
+                }
             } // end of game constructor
         }// end of game class
-         const game = new Game ({width: 23, height: 11, amountOfBombs: 15})
-         game.start ()
+        const game = new Game({ width: 23, height: 11, amountOfBombs: 15 })
+        game.start()
         document.body.addEventListener('keydown', e => {
             if (e.key === 'r' || e.key === 'R') {
                 game.reset()
-            } 
+            }
         });
     </script>
 </body>
