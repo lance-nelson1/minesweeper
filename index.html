@@ -6,9 +6,29 @@
 
             constructor({ width, height, amountOfBombs }) {
                 let rootDiv;
-                const lose = () => {
-                    alert('you lose')
+                const areAllNonBombsRevealed = () => {
+                    //for every cell
+                    for (const cell of cells) {
+                        //if it's not a bomb
+                        //and not revealed
+                        if (!cell.isBomb && !cell.isRevealed) {
+                            //return false
+                            return false
+                        }
+
+                    }
+                    //if none of cells return false return true
+                    return true
+                }
+                const win = () => {
+                    alert('you win')
                     game.reset()
+                }
+                const lose = () => {
+                    setTimeout(() => {
+                        alert('you lose')
+                        game.reset()
+                    },250)
                 }
                 this.start = () => {
                     rootDiv = document.createElement('div');
@@ -53,6 +73,9 @@
                             this.isRevealed = false;
                             div.addEventListener('click', () => {
                                 this.reveal();
+                                if (areAllNonBombsRevealed()) {
+                                    win()
+                                }
                             });
                             div.addEventListener('contextmenu', (e) => {
                                 e.preventDefault();
@@ -64,7 +87,7 @@
                                 }
                                 this.isRevealed = true
                                 if (this.isBomb) {
-                                    div.style.backgroundimage = 'red'
+                                    div.style.backgroundColor = 'red'
                                     lose()
                                 }
 
@@ -166,7 +189,7 @@
                 }
             } // end of game constructor
         }// end of game class
-        const game = new Game({ width: 23, height: 11, amountOfBombs: 15 })
+        const game = new Game({ width: 23, height: 11, amountOfBombs: 15  })
         game.start()
         document.body.addEventListener('keydown', e => {
             if (e.key === 'r' || e.key === 'R') {
