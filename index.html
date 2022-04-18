@@ -23,15 +23,18 @@
                 const win = () => {
                     alert('you win')
                     game.reset()
+
                 }
                 const lose = () => {
                     setTimeout(() => {
                         alert('you lose')
                         game.reset()
-                    },250)
+                    }, 250)
                 }
                 this.start = () => {
                     rootDiv = document.createElement('div');
+                    const timerDiv = document.createElement('div');
+                    rootDiv.appendChild(timerDiv)
                     document.body.appendChild(rootDiv)
                     const bombs = []
                     const addBomb = () => {
@@ -152,6 +155,9 @@
                     window.getCellByCoord = getCellByCoord
                     const creatBox = (row, x, y) => {
                         const div = document.createElement('div');
+
+
+
                         const cell = new Cell(x, y, div)
                         cells.push(cell)
                         div.style.width = '50px';
@@ -180,6 +186,24 @@
                             y = y + 1
                         }
                     }
+
+                    let time = (5)
+                    const timer = () => {
+                        setTimeout(() => {
+                            if (time > 0) {
+                                time = time - 1
+                                timer()
+                                console.log(time)
+                                timerDiv.innerHTML = time + 's'
+                            }
+                        }, 1000)
+                    }
+                    timer()
+                    timerDiv.innerHTML = time + 's'
+
+
+
+
                     creatRows(height, width)
 
                 } // end of start function
@@ -189,12 +213,14 @@
                 }
             } // end of game constructor
         }// end of game class
-        const game = new Game({ width: 23, height: 11, amountOfBombs: 15  })
+        const game = new Game({ width: 23, height: 10, amountOfBombs: 15 })
         game.start()
         document.body.addEventListener('keydown', e => {
             if (e.key === 'r' || e.key === 'R') {
                 game.reset()
+
             }
+
         });
     </script>
 </body>
