@@ -3,9 +3,12 @@
     <script type="text/javascript">
 
         class Game {
-
-            constructor({ width, height, amountOfBombs }) {
+            
+            constructor({ }) {
                 let rootDiv;
+                const width = Number(prompt('widht'))
+                const height = Number(prompt('height'))
+                const amountOfBombs = Number(prompt('amountOfBombs'))
                 const areAllNonBombsRevealed = () => {
                     //for every cell
                     for (const cell of cells) {
@@ -187,11 +190,11 @@
                         }
                     }
 
-                    let time = (5)
+                    let time = (1)
                     const timer = () => {
                         setTimeout(() => {
                             if (time > 0) {
-                                time = time - 1
+                                time = time + 1
                                 timer()
                                 console.log(time)
                                 timerDiv.innerHTML = time + 's'
@@ -213,7 +216,7 @@
                 }
             } // end of game constructor
         }// end of game class
-        const game = new Game({ width: 23, height: 10, amountOfBombs: 15 })
+        const game = new Game({})
         game.start()
         document.body.addEventListener('keydown', e => {
             if (e.key === 'r' || e.key === 'R') {
